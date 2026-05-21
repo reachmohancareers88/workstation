@@ -49,7 +49,7 @@ output "ip" {
 
 data "azurerm_subnet" "default" {
   name                 = "default"
-  virtual_network_name = "workstation-vnet"
+  virtual_network_name = "controller-vnet"
   resource_group_name  = "denmark-east-rg"
 }
 
