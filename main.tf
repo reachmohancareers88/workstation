@@ -7,20 +7,21 @@ resource "null_resource" "vm_manage" {
   depends_on = [null_resource.ip_manage]
 
   provisioner "local-exec" {
-    command = "az vm start --resource-group denmark-east-rg --name Controller"
+    command = "az vm start --resource-group workstation_group --name workstation"
   }
 
   provisioner "local-exec" {
     when    = destroy
-    command = "az vm deallocate --resource-group denmark-east-rg --name Controller"
+    command = "az vm deallocate --resource-group workstation_group --name workstation"
   }
 }
 
 resource "azurerm_public_ip" "workstation" {
   name                = "controller-public-ip"
   location            = "Denmark East"
-  resource_group_name = "denmark-east-rg"
+  resource_group_name = "workstation_group"
   allocation_method   = "Static"
+  sku                 = "Standard"
 }
 
 resource "null_resource" "ip_manage" {
@@ -28,12 +29,12 @@ resource "null_resource" "ip_manage" {
   depends_on = [azurerm_public_ip.workstation]
 
   provisioner "local-exec" {
-    command = "az network nic ip-config update --resource-group denmark-east-rg --nic-name controller917_z1 --name ipconfig1 --public-ip-address controller-public-ip"
+    command = "az network nic ip-config update --resource-group workstation_group --nic-name workstation636_z1 --name ipconfig1 --public-ip-address controller-public-ip"
   }
 
   provisioner "local-exec" {
     when    = destroy
-    command = "az network nic ip-config update --resource-group denmark-east-rg --nic-name controller917_z1 --name ipconfig1 --public-ip-address null"
+    command = "az network nic ip-config update --resource-group workstation_group --nic-name workstation636_z1 --name ipconfig1 --public-ip-address \"\""
   }
 }
 
